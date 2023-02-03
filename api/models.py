@@ -9,4 +9,4 @@ class Note(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.body[0:5]
+        return self.body[0:50]
