@@ -10,3 +10,13 @@ class Note(models.Model):
 
     def __str__(self):
         return self.body[0:50]
+
+
+class Question(models.Model):
+    question = models.TextField(null=True, blank=True)
+    correct_option = models.TextField(null=True, blank=True)
+    incorrect_option1 = models.TextField(null=True, blank=True)
+    incorrect_option2 = models.TextField(null=True, blank=True)
+    incorrect_option3 = models.TextField(null=True, blank=True)
+    incorrect_option4 = models.TextField(null=True, blank=True)
+    topic = models.TextField(null=True, blank=True)

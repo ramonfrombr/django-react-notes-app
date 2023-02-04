@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Note
-from .serializers import NoteSerializer
+from .models import Note, Question
+from .serializers import NoteSerializer, QuestionSerializer
 
 
 @api_view(['GET'])
@@ -56,4 +56,18 @@ def getNotes(request):
 def getNote(request, id):
     note = Note.objects.get(id=id)
     serializer = NoteSerializer(note)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getQuestions(request):
+    questions = Question.objects.all()
+    serializer = QuestionSerializer(questions, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def getQuestion(request, id):
+    question = Question.objects.get(id=id)
+    serializer = QuestionSerializer(question)
     return Response(serializer.data)
