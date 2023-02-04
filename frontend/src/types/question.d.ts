@@ -21,3 +21,24 @@ interface IResult {
   correct_option: string;
   result_correct: boolean;
 }
+
+interface ITriviaQuestion {
+  category: string;
+  correct_answer: string;
+  difficulty: string;
+  incorrect_answers: string[];
+  question: string;
+  type: string;
+}
+
+interface ITriviaChoice {
+  question: string;
+  choice: string | null;
+}
+
+interface ITriviaResult {
+  question: string;
+  user_choice: string | null;
+  correct_option: string;
+  result_correct: boolean;
+}
