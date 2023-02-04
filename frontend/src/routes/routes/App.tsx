@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import Question from "./components/Question";
-import Result from "./components/Result";
-import ResultGrade from "./components/ResultGrade";
+import { useLayoutEffect, useState } from "react";
+import Question from "../../components/Question";
+import Result from "../../components/Result";
+import ResultGrade from "../../components/ResultGrade";
 
 function App() {
   const [questions, setQuestions] = useState<IQuestion[]>([]);
