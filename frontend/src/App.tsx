@@ -1,12 +1,15 @@
 import axios from "axios";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import Question from "./components/Question";
+import Result from "./components/Result";
+import ResultGrade from "./components/ResultGrade";
 
 function App() {
   const [questions, setQuestions] = useState<IQuestion[]>([]);
   const [choices, setChoices] = useState<IChoice[]>([]);
   const [results, setResults] = useState<IResult[]>();
-  const [showResults, setShowResults] = useState(true);
+  const [showResults, setShowResults] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   useLayoutEffect(() => {
     getQuestions();
@@ -73,50 +76,53 @@ function App() {
           <h1 className="text-2xl mb-5">Results</h1>
           {results &&
             results.map((result) => (
-              <div
-                key={result.question_id}
-                className={`${
-                  result.result_correct ? "bg-green-500" : "bg-red-500"
-                } text-white p-2 mb-5 rounded border`}
-              >
-                <h3 className="text-2xl mb-3">{result.question}</h3>
-                {result.result_correct ? (
-                  <div>
-                    <p>Correct Answer: {result.correct_option}</p>
-                  </div>
-                ) : (
-                  <>
-                    <p>Correct Answer: {result.correct_option}</p>
-                    <p>Your Answer: {result.user_choice}</p>
-                  </>
-                )}
-              </div>
+              <Result key={result.question_id} result={result} />
             ))}
-          <div className="bg-gray-300 w-fit p-3">
-            <span className="text-xl">Results:</span>
-            <span className="text-2xl ml-3">
-              {results?.reduce(
-                (accumulator, currentResult) =>
-                  currentResult.result_correct
-                    ? (accumulator += 1)
-                    : accumulator,
-                0
-              )}
-              /{questions.length}
-            </span>
-          </div>
+          <ResultGrade results={results} questions={questions} />
         </div>
       ) : (
         <div className="p-5">
           <h1 className="text-2xl mb-5">Questions</h1>
-          {questions?.map((question, idx) => (
-            <Question
-              questionNumber={idx}
-              key={question.id}
-              question={question}
-              setChoices={setChoices}
-            />
-          ))}
+          <div className="flex items-center justify-center border">
+            <button
+              disabled={currentQuestionIndex !== 0 ? false : true}
+              className={`bg-gray-500 p-1 text-white ${
+                currentQuestionIndex !== 0 ? "visible" : " invisible"
+              }`}
+              onClick={() => setCurrentQuestionIndex((prev) => prev - 1)}
+            >
+              Previous Question
+            </button>
+            <div className="w-[600px] mx-5">
+              <h3 className="mb-3">
+                Question {currentQuestionIndex + 1} of {questions.length}
+              </h3>
+              {questions?.map((question, idx) => (
+                <Question
+                  currentQuestionIndex={currentQuestionIndex}
+                  questionNumber={idx}
+                  key={question.id}
+                  question={question}
+                  setChoices={setChoices}
+                />
+              ))}
+            </div>
+
+            <button
+              disabled={
+                currentQuestionIndex !== questions.length - 1 ? false : true
+              }
+              className={`bg-gray-500 p-1 text-white ${
+                currentQuestionIndex !== questions.length - 1
+                  ? "visible"
+                  : " invisible"
+              }`}
+              onClick={() => setCurrentQuestionIndex((prev) => prev + 1)}
+            >
+              Next Question
+            </button>
+          </div>
+
           <button
             className="bg-blue-500 text-white font-bold p-3"
             onClick={handleSaveChoices}

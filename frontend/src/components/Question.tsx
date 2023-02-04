@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 
 interface QuestionProps {
+  currentQuestionIndex: number;
   questionNumber: number;
   question: IQuestion;
   setChoices: React.Dispatch<React.SetStateAction<IChoice[]>>;
 }
 
-const Question = ({ questionNumber, question, setChoices }: QuestionProps) => {
+const Question = ({
+  currentQuestionIndex,
+  questionNumber,
+  question,
+  setChoices,
+}: QuestionProps) => {
   const options: string[] = [
     question.correct_option,
     question.incorrect_option1,
@@ -35,14 +41,15 @@ const Question = ({ questionNumber, question, setChoices }: QuestionProps) => {
         return [...newChoices];
       }
     });
-    console.log("question id: " + question.id + ", choice: " + e.target.value);
   };
 
   return (
-    <div className="border rounded flex flex-col items-start p-2 mb-5 bg-slate-100">
-      <h2 className="text-2xl my-2">
-        {questionNumber + 1}. {question.question}
-      </h2>
+    <div
+      className={`border rounded flex flex-col items-start p-2 bg-slate-100 ${
+        currentQuestionIndex === questionNumber ? "block" : "hidden"
+      }`}
+    >
+      <h2 className="text-2xl my-2">{question.question}</h2>
       <div className="bg-white w-full flex flex-col p-1 [&>label]:cursor-pointer [&>label:hover]:bg-slate-200 [&>label]:ease-in [&>label]:duration-150">
         {options.map((option, idx) => (
           <label
