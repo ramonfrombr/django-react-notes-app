@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import TriviaQuestion from "../../components/TriviaQuestion";
@@ -25,7 +25,17 @@ const ExamRoute = () => {
       )
       .then(function (response) {
         // handle success
-        console.log(response.data.results);
+        console.log(response.data.results[0]);
+
+        axios
+          .post("http://127.0.0.1:8000/trivia_question/", response.data.results)
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
         setTriviaQuestions(response.data.results);
       })
       .catch(function (error) {
