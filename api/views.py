@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Note, Question
+from .models import Note, Question, TriviaQuestion
 from .serializers import NoteSerializer, QuestionSerializer
 
 
@@ -71,3 +71,25 @@ def getQuestion(request, id):
     question = Question.objects.get(id=id)
     serializer = QuestionSerializer(question)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def saveTriviaQuestion(request):
+
+    for question in request.data:
+
+        print(question)
+
+        q = TriviaQuestion.objects.filter(
+            question=question['question']).first()
+
+        if q:
+            print(">>>> Question exists")
+            print(q)
+        else:
+            print(">>>> Question DOES NOT exists")
+            new_question = TriviaQuestion(**question)
+            new_question.save()
+        print("\n\n")
+
+    return Response({'message': 'success'})

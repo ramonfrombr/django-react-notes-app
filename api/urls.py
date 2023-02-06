@@ -7,5 +7,5 @@ urlpatterns = [
     path('note/<str:id>/', views.getNote, name="note"),
     path('questions/', views.getQuestions, name="questions"),
     path('question/<str:id>/', views.getQuestion, name="question"),
-
+    path('trivia_question/', views.saveTriviaQuestion, name="saveTriviaQuestion"),
 ]
