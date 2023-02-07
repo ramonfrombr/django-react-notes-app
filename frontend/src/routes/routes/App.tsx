@@ -37,7 +37,7 @@ function App() {
 
   const getQuestions = () => {
     axios
-      .get("http://127.0.0.1:8000/questions/")
+      .get("http://localhost:8000/questions/")
       .then((response: any) => setQuestions(response.data));
   };
 
