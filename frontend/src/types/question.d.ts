@@ -42,3 +42,19 @@ interface ITriviaResult {
   correct_option: string;
   result_correct: boolean;
 }
+
+interface ITriviaExamResults {
+  results: ITriviaExamResult[];
+}
+
+interface ITriviaExamResult {
+  category: string;
+  date: string;
+  id: number;
+  questions: {
+    exam: number;
+    id: number;
+    question: string;
+    result_correct: boolean;
+  }[];
+}

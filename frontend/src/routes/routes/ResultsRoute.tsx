@@ -14,8 +14,6 @@ const ResultsRoute = () => {
 
   let { results, category } = location.state as propState;
 
-  console.log(results);
-
   return (
     <div className="flex justify-center">
       <div className="p-5 sm:w-[600px]">

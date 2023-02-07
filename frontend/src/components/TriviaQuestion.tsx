@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo } from "react";
 import { renderHTML } from "../utils";
 
 interface TriviaQuestionProps {
@@ -14,10 +14,39 @@ const TriviaQuestion = ({
   currentQuestionIndex,
   setChoices,
 }: TriviaQuestionProps) => {
+  /*
   const options: string[] = [
     question.correct_answer,
     ...question.incorrect_answers,
-  ];
+  ];*/
+
+  const options = useMemo(
+    () => [question.correct_answer, ...question.incorrect_answers],
+    [question]
+  );
+
+  const shuffledOptions = useMemo(() => {
+    function shuffle(array: string[]) {
+      let currentIndex = array.length,
+        randomIndex;
+
+      // While there remain elements to shuffle.
+      while (currentIndex !== 0) {
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+          array[randomIndex],
+          array[currentIndex],
+        ];
+      }
+
+      return array;
+    }
+    return shuffle(options);
+  }, [options]);
 
   const handleChoice = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChoices((currrentChoices) => {
@@ -50,7 +79,7 @@ const TriviaQuestion = ({
       <h2 className="mb-4 sm:text-2xl">{renderHTML(question.question)}</h2>
 
       <div className="bg-white w-full flex flex-col p-1 [&>label]:cursor-pointer [&>label:hover]:bg-slate-200 [&>label]:ease-in [&>label]:duration-150">
-        {options.map((option, idx) => (
+        {shuffledOptions.map((option: string, idx: number) => (
           <label
             className="p-2 sm:text-xl"
             key={idx}

@@ -25,22 +25,19 @@ const ExamRoute = () => {
       )
       .then(function (response) {
         // handle success
-        console.log(response.data.results[0]);
 
         axios
-          .post("http://127.0.0.1:8000/trivia_question/", response.data.results)
-          .then(function (response) {
-            console.log(response);
-          })
+          .post("http://localhost:8000/trivia_question/", response.data.results)
+          .then()
           .catch(function (error) {
-            console.log(error);
+            alert(error);
           });
 
         setTriviaQuestions(response.data.results);
       })
       .catch(function (error) {
         // handle error
-        console.log(error);
+        alert(error);
       })
       .then(function () {
         // always executed
@@ -78,6 +75,14 @@ const ExamRoute = () => {
       }
     });
 
+    axios.post(
+      "http://localhost:8000/save_trivia_exam_result",
+      { category, r },
+      {
+        withCredentials: true,
+      }
+    );
+
     navigate("/results", {
       state: { results: r, category: category },
     });
@@ -87,7 +92,7 @@ const ExamRoute = () => {
     <div className="p-5">
       <h1 className="text-2xl mb-24">{category} Questions</h1>
       <div>
-        <div className="flex items-start justify-center border mb-5">
+        <div className="flex items-start justify-center mb-5">
           <button
             disabled={currentQuestionIndex !== 0 ? false : true}
             className={`mt-1 bg-gray-400 p-1 text-white ${
