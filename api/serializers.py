@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, CharField
-from .models import Note, Question, User, TriviaExam, TriviaQuestion, TriviaQuestionResult
+from .models import User, TriviaExam, TriviaQuestion, TriviaQuestionResult
 
 
 class UserSerializer(ModelSerializer):
@@ -19,15 +19,10 @@ class UserSerializer(ModelSerializer):
         return instance
 
 
-class NoteSerializer(ModelSerializer):
-    class Meta:
-        model = Note
-        fields = '__all__'
+class TriviaQuestionSerializer(ModelSerializer):
 
-
-class QuestionSerializer(ModelSerializer):
     class Meta:
-        model = Question
+        model = TriviaQuestion
         fields = '__all__'
 
 
