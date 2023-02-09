@@ -3,8 +3,8 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.decorators import api_view
-from .models import Note, Question, TriviaQuestion, User, TriviaExam, TriviaQuestionResult
-from .serializers import NoteSerializer, QuestionSerializer, UserSerializer, TriviaExamSerializer
+from .models import TriviaQuestion, User, TriviaExam, TriviaQuestionResult
+from .serializers import UserSerializer, TriviaExamSerializer, TriviaQuestionSerializer
 from rest_framework.views import APIView
 import jwt
 import datetime
@@ -73,7 +73,7 @@ class LoginView(APIView):
 
         payload = {
             'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=60),
             'iat': datetime.datetime.utcnow()
         }
 
@@ -91,10 +91,15 @@ class UserView(APIView):
 
         if not token:
             raise AuthenticationFailed("Unauthenticated!")
+
         try:
             payload = jwt.decode(token, 'secret', algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("Unauthenticated!")
+            response = Response()
+            response.delete_cookie('jwt')
+            return response
+
+            # raise AuthenticationFailed("Unauthenticated!")
 
         user = User.objects.filter(id=payload['id']).first()
         serializer = UserSerializer(user)
@@ -112,30 +117,16 @@ class LogoutView(APIView):
 
 
 @api_view(['GET'])
-def getNotes(request):
-    notes = Note.objects.all()
-    serializer = NoteSerializer(notes, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def getNote(request, id):
-    note = Note.objects.get(id=id)
-    serializer = NoteSerializer(note)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
 def getQuestions(request):
-    questions = Question.objects.all()
-    serializer = QuestionSerializer(questions, many=True)
+    questions = TriviaQuestion.objects.all()
+    serializer = TriviaQuestionSerializer(questions, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def getQuestion(request, id):
-    question = Question.objects.get(id=id)
-    serializer = QuestionSerializer(question)
+    question = TriviaQuestion.objects.get(id=id)
+    serializer = TriviaQuestionSerializer(question)
     return Response(serializer.data)
 
 

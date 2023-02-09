@@ -33,11 +33,13 @@ const ResultsHistoryRoute = () => {
   }
 
   return (
-    <div className="px-3">
-      <h1 className="my-5 text-3xl">Exam Results</h1>
-      {results.map((result, idx) => (
-        <ResultsHistoryItem key={idx} result={result} />
-      ))}
+    <div className="flex justify-center">
+      <div className="p-5 w-full sm:w-[600px]">
+        <h1 className="my-5 text-3xl">Exam Results</h1>
+        {results.map((result, idx) => (
+          <ResultsHistoryItem key={idx} result={result} />
+        ))}
+      </div>
     </div>
   );
 };
